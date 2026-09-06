@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+@import "tailwindcss";
+
+/*
+  Design direction: this is a document a borrower carries into a lender's
+  branch, not a SaaS dashboard. So the palette and type borrow from paper
+  ledgers and disclosure statements, not app UI. Numbers are set in
+  monospace throughout -- not for a "techy" look, but because tabular
+  figures need to line up and be scannable the way a bank statement is.
+*/
+
+:root {
+  --bg: #f6f4ef;
+  --bg-raised: #ffffff;
+  --ink: #211f1c;
+  --muted: #6b6659;
+  --rule: #ddd7c9;
+  --accent: #1f4b43;
+  --accent-soft: #e3ebe7;
+  --warn: #9a5b13;
+  --warn-soft: #f3e6d3;
+  --danger: #7a2e2e;
+  --danger-soft: #f2e0df;
+
+  --display: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --body: "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", Menlo, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.num {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+}
