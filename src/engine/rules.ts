@@ -1,11 +1,3 @@
-// Every number a human could reasonably argue about lives in this one
-// file. That's deliberate: if someone in the follow-up interview says
-// "why 50%, why not 45%," I want to point at one line, not go hunting
-// through five components. Each constant has a comment explaining where
-// it came from -- a real published source where one exists, my own
-// judgement where it doesn't. RULES.md is written directly from this file
-// so the two can never drift apart.
-
 export const FOIR_CAP_BY_INCOME_TYPE = {
   salaried: 0.5,
   "self-employed": 0.45,
