@@ -10,7 +10,7 @@ interface Props {
 /**
  * Renders one question and reports every change straight up to the
  * parent's answers object. There's no local component state and no
- * "submit" step per question -- every keystroke updates the shared
+ * "submit" step per question every keystroke updates the shared
  * answers object, which is what makes outputs recalculate live as the
  * brief's question-design rules require ("every additional question must
  * change an output"). If a question's answer never moves a number, that
@@ -19,6 +19,16 @@ interface Props {
  */
 export function QuestionField({ question, answers, onChange }: Props) {
   const value = answers[question.id];
+
+  // Every additional-tier question is skippable by design -- that's the
+  // whole point of the tier. Within the must tier, only a question
+  // explicitly marked required:false (currently just credit score) is
+  // skippable. Getting this right matters: an earlier version of this
+  // placeholder logic said "Skip if unsure" on every field regardless of
+  // whether that was true, which was actively misleading on required
+  // fields like household expenses the Continue button stayed
+  // disabled while the placeholder told you skipping was fine.
+  const isSkippable = question.tier === "additional" || question.required === false;
 
   const baseInputClasses =
     "w-full border-b-2 border-[var(--rule)] bg-transparent py-2 text-lg font-[var(--mono)] focus:border-[var(--accent)] focus:outline-none transition-colors";
@@ -46,18 +56,13 @@ export function QuestionField({ question, answers, onChange }: Props) {
           type="number"
           className={baseInputClasses}
           value={value === undefined ? "" : (value as number)}
-          placeholder="Skip if unsure"
+          placeholder={isSkippable ? "Skip if unsure" : "Enter a number"}
           onChange={(e) =>
             onChange(
               question.id,
               e.target.value === "" ? undefined : Number(e.target.value)
             )
           }
-          // Chrome/Brave increment or decrement a focused number input
-          // when the page is scrolled with a mouse wheel or trackpad --
-          // easy to trigger by accident and silently changes a value the
-          // borrower already typed in. Blurring on wheel stops the
-          // browser from treating a page-scroll as an input adjustment.
           onWheel={(e) => e.currentTarget.blur()}
         />
       )}
@@ -69,7 +74,7 @@ export function QuestionField({ question, answers, onChange }: Props) {
             type="number"
             className={baseInputClasses}
             value={value === undefined ? "" : (value as number)}
-            placeholder="Skip if unsure"
+            placeholder={isSkippable ? "Skip if unsure" : "Enter an amount"}
             onChange={(e) =>
               onChange(
                 question.id,
