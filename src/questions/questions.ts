@@ -1,6 +1,6 @@
 import type { BorrowerAnswers } from "../engine/types";
 
-// The brief's rule 1 is "adaptive -- a salaried IT employee and a kirana
+// The brief's rule 1 is "adaptive a salaried IT employee and a kirana
 // owner should not see the same 30 questions." Rather than writing three
 // separate hardcoded forms (which is what plain HTML/JS would tempt you
 // into under time pressure), each question here carries a `showIf`
@@ -36,12 +36,16 @@ export interface Question {
   helpText?: string;
   type: QuestionType;
   options?: { value: string; label: string }[];
+  /** Only asked if this returns true given answers so far. Absent means
+   * "always ask" (used by the must-tier baseline). */
   showIf?: (a: BorrowerAnswers) => boolean;
+  /** Which output(s) this question exists to sharpen  documentation
+   * for RULES.md and for me in the follow-up, not read by the app. */
   tightens: string;
 }
 
 export const QUESTIONS: Question[] = [
-  // ---------- MUST: minimum to produce all four outputs ----------
+  // MUST: minimum to produce all four outputs
   {
     id: "purpose",
     tier: "must",
@@ -170,7 +174,7 @@ export const QUESTIONS: Question[] = [
     label: "Do you own any property or asset you could offer as security?",
     helpText: "Enter its rough market value, or skip if none.",
     type: "currency",
-    showIf: (a) => a.incomeType !== "salaried",
+    showIf: () => true,
     tightens: "Product routing and the lender's sanction ceiling for secured products.",
   },
   {
@@ -195,7 +199,7 @@ export const QUESTIONS: Question[] = [
     label: "If yes, roughly how much extra could that bring in per month?",
     type: "currency",
     showIf: (a) => a.loanIsProductive === true,
-    tightens: "Adds a conservative fraction of the projected return to the safe-carry amount.",
+    tightens: "Softens the verdict when the loan plausibly pays for itself.",
   },
   {
     id: "offerAlreadyReceivedRate",
